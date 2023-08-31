@@ -20,9 +20,9 @@ class Scripts {
 	*/
 	public function init() {
 		add_action( 'admin_head', array( $this, 'admin_scripts' ) );
-		add_action( 'wp_footer', array( $this, 'frontend_scripts' ) );
-		add_action( 'wp_ajax_get_duration_type', array( $this, 'get_duration_type' ) );
-		add_action( 'wp_ajax_nopriv_get_duration_type', array( $this, 'get_duration_type' ) );
+//		add_action( 'wp_footer', array( $this, 'frontend_scripts' ) );
+//		add_action( 'wp_ajax_get_duration_type', array( $this, 'get_duration_type' ) );
+//		add_action( 'wp_ajax_nopriv_get_duration_type', array( $this, 'get_duration_type' ) );
 	}
 
 	/**
@@ -45,7 +45,7 @@ class Scripts {
 					function fieldVisibility() {
 						var renewal_type = $('#rcp-level-renewal-type').val();
 
-						if ( 'year' !== $('#rcp-duration-unit').val() || 0 >= $('#rcp-duration').val() ) {
+						if ( 'year' !== $('#rcp-duration-unit').val() || '0' === $('#rcp-duration').val() || '0' !== $('#trial_duration').val() ) {
 							$('#rcp-expiration-date-row').hide();
 							$('#rcp-renewal-type-row').hide();
 						} else {
@@ -63,7 +63,7 @@ class Scripts {
 					fieldVisibility();
 
 					// run on change
-					$('#rcp-duration-unit, #rcp-duration, #rcp-level-renewal-type').on('change', fieldVisibility);
+					$('#rcp-duration-unit, #rcp-duration, #rcp-level-renewal-type, #trial_duration').on('change', fieldVisibility);
 
 					// show the correct number of days in the renewal day dropdown
 					$('#rcp-level-renewal-month').on('change', function() {

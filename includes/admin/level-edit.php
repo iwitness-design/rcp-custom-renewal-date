@@ -100,7 +100,7 @@ class Level_Edit {
 		 */
 		global $rcp_levels_db;
 
-		if ( empty( $_POST['duration'] ) || empty( $_POST['duration_unit'] ) || 'year' !== $_POST['duration_unit'] ) {
+		if ( empty( $_POST['duration'] ) || empty( $_POST['duration_unit'] ) || 'year' !== $_POST['duration_unit'] || ! empty( $_POST['trial_duration'] ) ) {
 			$rcp_levels_db->delete_meta( $level_id, 'renewal_duration_type' );
 			$rcp_levels_db->delete_meta( $level_id, 'custom_renewal_date' );
 
@@ -109,7 +109,7 @@ class Level_Edit {
 
 		if ( ! empty( $_POST['rcp-level-renewal-type'] ) && 'custom' === $_POST['rcp-level-renewal-type'] ) {
 			$rcp_levels_db->update_meta( $level_id, 'renewal_duration_type', 'custom' );
-			$date = date( 'U', strtotime( $_POST['rcp-level-renewal-month'] . '/' . $_POST['rcp-level-renewal-day'] . '/' . date( 'Y' ) ) . ' 23:59:59' );
+			$date = date( 'U', strtotime( $_POST['rcp-level-renewal-month'] . '/' . $_POST['rcp-level-renewal-day'] . '/' . date( 'Y' ) . ' 23:59:59' ) );
 
 			if ( ! empty( $_POST['rcp-level-renewal-month'] ) && ! empty( $_POST['rcp-level-renewal-day']) ) {
 				$rcp_levels_db->update_meta( $level_id, 'custom_renewal_date', $date );

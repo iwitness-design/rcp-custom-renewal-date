@@ -36,11 +36,7 @@ class RCP_Custom_Renewal_Date {
 
 		$this->includes();
 
-//		add_filter( 'rcp_membership_get_expiration_date', array( $this, 'get_membership_expiration_date' ), 10, 4 );
-//		add_filter( 'rcp_membership_get_expiration_time', array( $this, 'get_membership_renewal_time' ), 10, 3 );
-		add_filter( 'rcp_calculate_membership_level_expiration', array( $this, 'calculate_membership_level_expiration' ), 10, 3 );
-		add_filter( 'rcp_membership_calculated_expiration_date', array( $this, 'calculate_membership_expiration' ), 10, 3 );
-
+		add_filter( 'rcp_calculate_membership_level_expiration', array( $this, 'calculate_membership_level_expiration' ), 10, 2 );
 	}
 
 	/**
@@ -60,94 +56,30 @@ class RCP_Custom_Renewal_Date {
 	}
 
 	/**
-	 * Maybe modify the membership expiration date, if the associated membership level has a custom renewal date.
-	 *
-	 * @param string         $expiration    Membership expiration date.
-	 * @param bool           $formatted     Whether or not the date should be nicely formatted.
-	 * @param int            $membership_id ID of the membership.
-	 * @param RCP_Membership $membership    Membership object.
-	 *
-	 * @since 1.0.0
-	 * @return string
-	 */
-	public function get_membership_expiration_date( $expiration, $formatted, $membership_id, $membership ) {
-
-		$level_id = $membership->get_object_id();
-
-		if( ! empty( $level_id ) ) {
-
-			$date = $this->get_subscription_renewal_date( $level_id );
-
-			if( ! empty( $date ) ) {
-
-				$expiration = $date;
-
-				if ( $formatted && 'none' != $expiration ) {
-					$expiration = date_i18n( get_option( 'date_format' ), strtotime( $expiration, current_time( 'timestamp' ) ) );
-				}
-
-			}
-		}
-
-		return $expiration;
-
-	}
-
-	/**
-	 * Maybe modify the membership expiration timestamp, if the associated membership level has a custom renewal date.
-	 *
-	 * @param int|false      $timestamp     Membership expiration timestamp.
-	 * @param int            $membership_id ID of the membership.
-	 * @param RCP_Membership $membership    Membership object.
-	 *
-	 * @since 1.0.0
-	 * @return int|false
-	 */
-	public function get_membership_renewal_time( $timestamp, $membership_id, $membership ) {
-
-		$level_id = $membership->get_object_id();
-
-		if( ! empty( $level_id ) ) {
-
-			$date = $this->get_subscription_renewal_date( $level_id );
-
-			if( ! empty( $date ) ) {
-
-				$timestamp = strtotime( $date );
-
-			}
-
-		}
-
-		return $timestamp;
-
-	}
-
-	/**
 	 * Maybe override the calculated expiration date with the custom renewal date.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param \RCP\Membership_Level $membership_level Membership level object.
-	 * @param bool                  $set_trial        Whether or not to set a trial.
 	 * @param string                $expiration       Calculated date in MySQL format, or `none` if no expiration.
+	 * @param \RCP\Membership_Level $membership_level Membership level object.
 	 *
 	 * @return string
 	 * @see   rcp_calculate_subscription_expiration() for the original function.
 	 *
 	 */
-	public function calculate_membership_level_expiration( $expiration, $membership_level, $set_trial ) {
+	public function calculate_membership_level_expiration( $expiration, $membership_level ) {
 
-		// don't override the expiration date if the membership level is lifetime or doesn't have a custom renewal date
-		if ( empty( $date ) || $membership_level->is_lifetime() ) {
+		// don't override the expiration date if the membership level is lifetime
+		if ( $membership_level->is_lifetime() ) {
 			return $expiration;
 		}
 
 		// don't override the expiration date if the membership level has a trial
-		if ( $set_trial && $membership_level->has_trial() ) {
+		if ( $membership_level->has_trial() ) {
 			return $expiration;
 		}
 
+		// only override the expiration date if the membership level has a custom renewal date
 		if ( 'year' != $membership_level->get_duration_unit() || empty( $membership_level->get_duration() ) ) {
 			return $expiration;
 		}
@@ -156,41 +88,7 @@ class RCP_Custom_Renewal_Date {
 
 		$expiration_date = date( 'Y-m-d H:i:s', $expiration_timestamp );
 
-		return apply_filters( 'rcp_crd_calculate_membership_level_expiration', $expiration_date, $expiration, $membership_level, $set_trial );
-	}
-
-	/**
-	 * Maybe override the expiration date calculated for membership renewals.
-	 *
-	 * This actually will probably never be used, it's just here in case someone tries to renew a membership that has
-	 * a hard-set expiration date, which should never actually happen.
-	 *
-	 * @param string         $expiration    Calculated expiration date.
-	 * @param int            $membership_id ID of the membership.
-	 * @param RCP_Membership $membership    Membership object.
-	 *
-	 * @since 1.0.0
-	 * @return string
-	 */
-	public function calculate_membership_expiration( $expiration, $membership_id, $membership ) {
-
-		$membership_level_id = $membership->get_object_id();
-		$membership_level    = rcp_get_membership_level( $membership_level_id );
-
-		// don't override the expiration date if the membership level is lifetime or is trialing
-		if ( $membership->is_trialing() || $membership_level->is_lifetime() ) {
-			return $expiration;
-		}
-
-		if ( 'year' != $membership_level->get_duration_unit() || empty( $membership_level->get_duration() ) ) {
-			return $expiration;
-		}
-
-		$expiration_timestamp = $this->get_subscription_renewal_date( $membership_level_id, $membership_level->get_duration(), strtotime( $expiration ) );
-
-		$expiration_date = date( 'Y-m-d H:i:s', $expiration_timestamp );
-
-		return apply_filters( 'rcp_crd_calculate_membership_level_expiration', $expiration_date, $expiration, $membership );
+		return apply_filters( 'rcp_crd_calculate_membership_level_expiration', $expiration_date, $expiration, $membership_level );
 	}
 
 	/**
