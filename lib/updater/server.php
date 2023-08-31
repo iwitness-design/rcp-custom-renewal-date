@@ -107,7 +107,7 @@ class Ithemes_Updater_Server {
 			if ( $time_remaining < 0 ) {
 				delete_site_option( 'ithemes-updater-server-timed-out' );
 			} else {
-				return new WP_Error( 'ithemes-updater-timed-out-server', sprintf( _n( 'The server could not be contacted. Requests are delayed for %d minute to allow the server to recover.', 'The server could not be contacted. Requests are delayed for %d minutes to allow the server to recover.', $minutes_remaining, 'rcp-hsed' ), $minutes_remaining ) );
+				return new WP_Error( 'ithemes-updater-timed-out-server', sprintf( _n( 'The server could not be contacted. Requests are delayed for %d minute to allow the server to recover.', 'The server could not be contacted. Requests are delayed for %d minutes to allow the server to recover.', $minutes_remaining, 'rcp-custom-renewal-date' ), $minutes_remaining ) );
 			}
 		}
 
@@ -184,7 +184,7 @@ class Ithemes_Updater_Server {
 				// Set option to delay server checks for a period of time.
 				update_site_option( 'ithemes-updater-server-timed-out', time() );
 
-				return new WP_Error( 'http_request_failed', __( 'The server was unable to be contacted.', 'rcp-hsed' ) );
+				return new WP_Error( 'http_request_failed', __( 'The server was unable to be contacted.', 'rcp-custom-renewal-date' ) );
 			}
 
 			return $response;
@@ -194,7 +194,7 @@ class Ithemes_Updater_Server {
 		$body = json_decode( $response['body'], true );
 
 		if ( ! empty( $body['error'] ) ) {
-			return new WP_Error( $body['error']['type'], sprintf( __( 'An error occurred when communicating with the iThemes update server: %s (%s)', 'rcp-hsed' ), $body['error']['message'], $body['error']['code'] ) );
+			return new WP_Error( $body['error']['type'], sprintf( __( 'An error occurred when communicating with the iThemes update server: %s (%s)', 'rcp-custom-renewal-date' ), $body['error']['message'], $body['error']['code'] ) );
 		}
 
 

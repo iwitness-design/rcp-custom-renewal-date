@@ -1,10 +1,12 @@
 <?php
 
-class RCP_HSED_Scripts {
+namespace RCP_Custom_Renewal_Date;
+
+class Scripts {
 
 	/**
 	 * @access  public
-	 * @since   1.0
+	 * @since   1.0.0
 	*/
 	public function __construct() {
 		$this->init();
@@ -14,7 +16,7 @@ class RCP_HSED_Scripts {
 	 * Get things started
 	 *
 	 * @access  public
-	 * @since   1.0
+	 * @since   1.0.0
 	*/
 	public function init() {
 		add_action( 'admin_head', array( $this, 'admin_scripts' ) );
@@ -27,7 +29,7 @@ class RCP_HSED_Scripts {
 	 * Output our admin JS
 	 *
 	 * @access  public
-	 * @since   1.0
+	 * @since   1.0.0
 	*/
 	public function admin_scripts() {
 		global $rcp_subscriptions_page;
@@ -39,31 +41,42 @@ class RCP_HSED_Scripts {
 			(function($) {
 				$(document).ready( function() {
 
-					var is_hardset = false;
+					// handle logic for field visibility
+					function fieldVisibility() {
+						var renewal_type = $('#rcp-level-renewal-type').val();
 
-					$('.rcp-sub-duration-col').remove();
+						if ( 'year' !== $('#rcp-duration-unit').val() || 0 >= $('#rcp-duration').val() ) {
+							$('#rcp-expiration-date-row').hide();
+							$('#rcp-renewal-type-row').hide();
+						} else {
+							$('#rcp-renewal-type-row').show();
 
-					if ( $('#rcp-level-duration-type').val() === 'hardset' ) {
-						is_hardset = true;
-						$('#rcp-duration, #rcp-duration-unit').prop('disabled', true);
-
-						// We need to add a hidden input field with the value "0" because disabled fields do not get sent through $_POST.
-						$('#rcp-duration').attr( 'value', '0' ).parent().append('<input type="hidden" id="rcp-hardset-expiration-duration" name="duration" value="0">');
+							if ('custom' === renewal_type) {
+								$('#rcp-expiration-date-row').show();
+							} else {
+								$('#rcp-expiration-date-row').hide();
+							}
+						}
 					}
 
-					$('#rcp-level-duration-type').on('change', function() {
-						if ( $(this).val() === 'hardset' ) {
-							$('#rcp-duration, #rcp-duration-unit').prop('disabled', true);
-							$('#rcp-duration').attr( 'value', '0' ).parent().append('<input type="hidden" id="rcp-hardset-expiration-duration" name="duration" value="0">');
-							$('#rcp-expiration-date-row').fadeIn();
-							is_hardset = true;
-						} else {
-							$('#rcp-expiration-date-row').fadeOut();
-							$('#rcp-duration, #rcp-duration-unit').prop('disabled', false);
-							$('#rcp-hardset-expiration-duration').remove();
-							is_hardset = false;
+					// run initially on page load
+					fieldVisibility();
+
+					// run on change
+					$('#rcp-duration-unit, #rcp-duration, #rcp-level-renewal-type').on('change', fieldVisibility);
+
+					// show the correct number of days in the renewal day dropdown
+					$('#rcp-level-renewal-month').on('change', function() {
+						let days = $(this).find('option:selected').data('days');
+						let options = '';
+
+						for (let i = 1; i <= days; i++) {
+							options += `<option value="${i}">${i}</option>`;
 						}
-					});
+
+						$('#rcp-level-renewal-day').html(options);
+					})
+
 				});
 			})(jQuery);
 
@@ -103,8 +116,8 @@ class RCP_HSED_Scripts {
 					url: rcp_script_options.ajaxurl,
 					success: function(response) {
 						$.each(response.ids, function(key, value) {
-							hardset = $("#rcp_registration_form :input[value="+value+"]").attr('data-duration-type', 'hardset'); // add a data attribute while we're here
-							$(hardset).siblings('label').find('.rcp_level_duration, .rcp_price .rcp_separator').remove();
+							custom = $("#rcp_registration_form :input[value="+value+"]").attr('data-duration-type', 'custom'); // add a data attribute while we're here
+							$(custom).siblings('label').find('.rcp_level_duration, .rcp_price .rcp_separator').remove();
 						});
 					},
 					error: function(response) {
@@ -120,9 +133,9 @@ class RCP_HSED_Scripts {
 	 * Gets the duration type of the requested subscription levels.
 	 *
 	 * @access public
-	 * @since 1.0.1
+	 * @since 1.0.0
 	 *
-	 * @return array An array of subscription IDs with hard-set duration type.
+	 * @return null - Sends a json array of subscription IDs with hard-set duration type.
 	 */
 	public function get_duration_type() {
 
@@ -131,17 +144,17 @@ class RCP_HSED_Scripts {
 		}
 
 		/**
-		 * @var RCP_Hardset_Expiration_Dates $rcp_hsed
+		 * @var \RCP_Custom_Renewal_Date $rcp_custom_renewal_date
 		 */
-		global $rcp_hsed;
+		global $rcp_custom_renewal_date;
 
 		$ids = array();
 		foreach ( $_POST['ids'] as $id ) {
 
-			$date = $rcp_hsed->get_subscription_expiration_date( $id );
-			$type = $rcp_hsed->get_subscription_duration_type( $id );
+			$date = $rcp_custom_renewal_date->get_subscription_renewal_date( $id );
+			$type = $rcp_custom_renewal_date->get_subscription_duration_type( $id );
 
-			if ( 'hardset' === $type || ! empty( $date ) ) {
+			if ( 'custom' === $type || ! empty( $date ) ) {
 				array_push( $ids, $id );
 			}
 		}
@@ -151,4 +164,4 @@ class RCP_HSED_Scripts {
 		) );
 	}
 }
-new RCP_HSED_Scripts;
+new Scripts;

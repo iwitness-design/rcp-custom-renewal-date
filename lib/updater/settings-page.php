@@ -112,20 +112,20 @@ class Ithemes_Updater_Settings_Page {
 		$GLOBALS['ithemes-updater-settings']->flush( 'settings saved' );
 
 
-		$this->messages[] = __( 'Settings saved', 'rcp-hsed' );
+		$this->messages[] = __( 'Settings saved', 'rcp-custom-renewal-date' );
 	}
 
 	private function license_packages( $data ) {
 		check_admin_referer( 'license_packages', 'ithemes_updater_nonce' );
 
 		if ( empty( $data['username'] ) && empty( $data['password'] ) )
-			$this->errors[] = __( 'You must supply an iThemes membership username and password in order to license products.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership username and password in order to license products.', 'rcp-custom-renewal-date' );
 		else if ( empty( $data['username'] ) )
-			$this->errors[] = __( 'You must supply an iThemes membership username in order to license products.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership username in order to license products.', 'rcp-custom-renewal-date' );
 		else if ( empty( $data['password'] ) )
-			$this->errors[] = __( 'You must supply an iThemes membership password in order to license products.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership password in order to license products.', 'rcp-custom-renewal-date' );
 		else if ( empty( $data['packages'] ) )
-			$this->errors[] = __( 'You must select at least one product to license. Ensure that you select the products that you wish to license in the listing below.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must select at least one product to license. Ensure that you select the products that you wish to license in the listing below.', 'rcp-custom-renewal-date' );
 
 		if ( ! empty( $this->errors ) )
 			return;
@@ -140,7 +140,7 @@ class Ithemes_Updater_Settings_Page {
 		}
 
 		if ( empty( $response['packages'] ) ) {
-			$this->errors[] = __( 'An unknown server error occurred. Please try to license your products again at another time.', 'rcp-hsed' );
+			$this->errors[] = __( 'An unknown server error occurred. Please try to license your products again at another time.', 'rcp-custom-renewal-date' );
 			return;
 		}
 
@@ -160,23 +160,23 @@ class Ithemes_Updater_Settings_Page {
 			if ( ! empty( $data['key'] ) )
 				$success[] = $name;
 			else if ( ! empty( $data['status'] ) && ( 'expired' == $data['status'] ) )
-				$warn[$name] = __( 'Your product subscription has expired', 'rcp-hsed' );
+				$warn[$name] = __( 'Your product subscription has expired', 'rcp-custom-renewal-date' );
 			else
 				$fail[$name] = $data['error']['message'];
 		}
 
 
 		if ( ! empty( $success ) )
-			$this->messages[] = wp_sprintf( __( 'Successfully licensed %l.', 'rcp-hsed' ), $success );
+			$this->messages[] = wp_sprintf( __( 'Successfully licensed %l.', 'rcp-custom-renewal-date' ), $success );
 
 		if ( ! empty( $fail ) ) {
 			foreach ( $fail as $name => $reason )
-				$this->errors[] = sprintf( __( 'Unable to license %1$s. Reason: %2$s', 'rcp-hsed' ), $name, $reason );
+				$this->errors[] = sprintf( __( 'Unable to license %1$s. Reason: %2$s', 'rcp-custom-renewal-date' ), $name, $reason );
 		}
 
 		if ( ! empty( $warn ) ) {
 			foreach ( $warn as $name => $reason )
-				$this->soft_errors[] = sprintf( __( 'Unable to license %1$s. Reason: %2$s', 'rcp-hsed' ), $name, $reason );
+				$this->soft_errors[] = sprintf( __( 'Unable to license %1$s. Reason: %2$s', 'rcp-custom-renewal-date' ), $name, $reason );
 		}
 	}
 
@@ -184,13 +184,13 @@ class Ithemes_Updater_Settings_Page {
 		check_admin_referer( 'unlicense_packages', 'ithemes_updater_nonce' );
 
 		if ( empty( $data['username'] ) && empty( $data['password'] ) )
-			$this->errors[] = __( 'You must supply an iThemes membership username and password in order to remove licenses.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership username and password in order to remove licenses.', 'rcp-custom-renewal-date' );
 		else if ( empty( $data['username'] ) )
-			$this->errors[] = __( 'You must supply an iThemes membership username in order to remove licenses.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership username in order to remove licenses.', 'rcp-custom-renewal-date' );
 		else if ( empty( $data['password'] ) )
-			$this->errors[] = __( 'You must supply an iThemes membership password in order to remove licenses.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership password in order to remove licenses.', 'rcp-custom-renewal-date' );
 		else if ( empty( $data['packages'] ) )
-			$this->errors[] = __( 'You must select at least one license to remove. Ensure that you select the licenses that you wish to remove in the listing below.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must select at least one license to remove. Ensure that you select the licenses that you wish to remove in the listing below.', 'rcp-custom-renewal-date' );
 
 		if ( ! empty( $this->errors ) )
 			return;
@@ -205,7 +205,7 @@ class Ithemes_Updater_Settings_Page {
 		}
 
 		if ( empty( $response['packages'] ) ) {
-			$this->errors[] = __( 'An unknown server error occurred. Please try to remove licenses from your products again at another time.', 'rcp-hsed' );
+			$this->errors[] = __( 'An unknown server error occurred. Please try to remove licenses from your products again at another time.', 'rcp-custom-renewal-date' );
 			return;
 		}
 
@@ -226,16 +226,16 @@ class Ithemes_Updater_Settings_Page {
 			else if ( isset( $data['error'] ) && isset( $data['error']['message'] ) )
 				$fail[$name] = $data['error']['message'];
 			else
-				$fail[$name] = __( 'Unknown server error.', 'rcp-hsed' );
+				$fail[$name] = __( 'Unknown server error.', 'rcp-custom-renewal-date' );
 		}
 
 
 		if ( ! empty( $success ) )
-			$this->messages[] = wp_sprintf( _n( 'Successfully removed license from %l.', 'Successfully removed licenses from %l.', count( $success ), 'rcp-hsed' ), $success );
+			$this->messages[] = wp_sprintf( _n( 'Successfully removed license from %l.', 'Successfully removed licenses from %l.', count( $success ), 'rcp-custom-renewal-date' ), $success );
 
 		if ( ! empty( $fail ) ) {
 			foreach ( $fail as $name => $reason )
-				$this->errors[] = sprintf( __( 'Unable to remove license from %1$s. Reason: %2$s', 'rcp-hsed' ), $name, $reason );
+				$this->errors[] = sprintf( __( 'Unable to remove license from %1$s. Reason: %2$s', 'rcp-custom-renewal-date' ), $name, $reason );
 		}
 	}
 
@@ -262,7 +262,7 @@ class Ithemes_Updater_Settings_Page {
 
 
 		if ( ! empty( $_REQUEST['updated_url'] ) ) {
-			$this->messages[] = __( 'Successfully updated the Licensed URL.', 'rcp-hsed' );
+			$this->messages[] = __( 'Successfully updated the Licensed URL.', 'rcp-custom-renewal-date' );
 		}
 
 
@@ -271,7 +271,7 @@ class Ithemes_Updater_Settings_Page {
 
 ?>
 	<div class="wrap">
-		<h2><?php _e( 'iThemes Licensing', 'rcp-hsed' ); ?></h2>
+		<h2><?php _e( 'iThemes Licensing', 'rcp-custom-renewal-date' ); ?></h2>
 
 		<?php
 			$this->list_licensed_products( $licensed, $post_data, $action );
@@ -292,47 +292,47 @@ class Ithemes_Updater_Settings_Page {
 		<?php wp_nonce_field( 'save_settings', 'ithemes_updater_nonce' ); ?>
 
 		<div id="ithemes-updater-settings">
-			<h3 class="subtitle"><?php _e( 'Settings', 'rcp-hsed' ); ?></h3>
+			<h3 class="subtitle"><?php _e( 'Settings', 'rcp-custom-renewal-date' ); ?></h3>
 
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
 						<th scope="row">
-							<?php _e( 'Licensed URL', 'rcp-hsed' ); ?>
+							<?php _e( 'Licensed URL', 'rcp-custom-renewal-date' ); ?>
 						</th>
 						<td>
 							<p>
 								<code><?php echo $GLOBALS['ithemes-updater-settings']->get_licensed_site_url(); ?></code>
-								<a href="<?php echo admin_url( 'options-general.php?page=ithemes-licensing&action=change_licensed_site_url' ); ?>" class="button button-primary"><?php _e( 'Change', 'rcp-hsed' ); ?></a>
+								<a href="<?php echo admin_url( 'options-general.php?page=ithemes-licensing&action=change_licensed_site_url' ); ?>" class="button button-primary"><?php _e( 'Change', 'rcp-custom-renewal-date' ); ?></a>
 							</p>
 
 							<?php if ( is_multisite() ) : ?>
-								<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress network. If this is not set correctly, some features may not function as expected.', 'rcp-hsed' ); ?></p>
+								<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress network. If this is not set correctly, some features may not function as expected.', 'rcp-custom-renewal-date' ); ?></p>
 							<?php else : ?>
-								<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress site. If this is not set correctly, some features may not function as expected.', 'rcp-hsed' ); ?></p>
+								<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress site. If this is not set correctly, some features may not function as expected.', 'rcp-custom-renewal-date' ); ?></p>
 							<?php endif; ?>
 						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">
-							<label for="quick_releases"><?php _e( 'Quick Release Updates', 'rcp-hsed' ); ?></label>
+							<label for="quick_releases"><?php _e( 'Quick Release Updates', 'rcp-custom-renewal-date' ); ?></label>
 						</th>
 						<td>
 							<?php $checked = ( $quick_releases ) ? ' checked="checked"' : ''; ?>
 
 							<label>
 								<input id="quick_releases" type="checkbox" name="quick_releases" value="1" <?php echo $checked; ?>/>
-								<?php _e( 'Enable quick release updates', 'rcp-hsed' ); ?>
+								<?php _e( 'Enable quick release updates', 'rcp-custom-renewal-date' ); ?>
 							</label>
 
-							<p class="description"><?php _e( 'Some products have quick releases that are created to solve specific issues that some users experience. In order to avoid causing users to have updates show up too frequently, automatic updates to these quick releases are disabled by default. Enabling this feature allows quick releases to be available to the automatic update system. Using this option is only recommended if support has requested that you enable it in order to receive a quick release. You should disable this option at a later time after confirming that the quick release solves the issue for you.', 'rcp-hsed' ); ?></p>
+							<p class="description"><?php _e( 'Some products have quick releases that are created to solve specific issues that some users experience. In order to avoid causing users to have updates show up too frequently, automatic updates to these quick releases are disabled by default. Enabling this feature allows quick releases to be available to the automatic update system. Using this option is only recommended if support has requested that you enable it in order to receive a quick release. You should disable this option at a later time after confirming that the quick release solves the issue for you.', 'rcp-custom-renewal-date' ); ?></p>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 
 			<p class="submit">
-				<input id="save_settings" class="button button-primary" type="submit" value="<?php _e( 'Save Settings', 'rcp-hsed' ); ?>" />
+				<input id="save_settings" class="button button-primary" type="submit" value="<?php _e( 'Save Settings', 'rcp-custom-renewal-date' ); ?>" />
 				<input type="hidden" name="action" value="save_settings" />
 			</p>
 		</div>
@@ -351,10 +351,10 @@ class Ithemes_Updater_Settings_Page {
 		$time = time();
 
 		$headings = array(
-			__( 'Product', 'rcp-hsed' ),
-			__( 'Member', 'rcp-hsed' ),
-			__( 'Expiration', 'rcp-hsed' ),
-			__( 'Remaining Licenses', 'rcp-hsed' ),
+			__( 'Product', 'rcp-custom-renewal-date' ),
+			__( 'Member', 'rcp-custom-renewal-date' ),
+			__( 'Expiration', 'rcp-custom-renewal-date' ),
+			__( 'Remaining Licenses', 'rcp-custom-renewal-date' ),
 		);
 
 		if ( ( 'unlicense_packages' != $action ) || empty( $this->errors ) ) {
@@ -370,7 +370,7 @@ class Ithemes_Updater_Settings_Page {
 		<?php wp_nonce_field( 'unlicense_packages', 'ithemes_updater_nonce' ); ?>
 
 		<div class="ithemes-updater-products" id="ithemes-updater-licensed">
-			<h3 class="subtitle"><?php _e( 'Licensed Products', 'rcp-hsed' ); ?></h3>
+			<h3 class="subtitle"><?php _e( 'Licensed Products', 'rcp-custom-renewal-date' ); ?></h3>
 
 			<table class="ithemes-updater-listing widefat">
 				<thead>
@@ -382,12 +382,12 @@ class Ithemes_Updater_Settings_Page {
 							</label>
 						</th>
 						<th scope="col">
-							<label for="cb-select-all-1"><?php _e( 'Product', 'rcp-hsed' ); ?></label>
+							<label for="cb-select-all-1"><?php _e( 'Product', 'rcp-custom-renewal-date' ); ?></label>
 						</th>
-						<th scope="col"><?php _e( 'Member', 'rcp-hsed' ); ?></th>
-						<th scope="col"><?php _e( 'Product Status', 'rcp-hsed' ); ?></th>
-						<th scope="col"><?php _e( 'Expiration', 'rcp-hsed' ); ?></th>
-						<th scope="col"><?php _e( 'Remaining Licenses', 'rcp-hsed' ); ?></th>
+						<th scope="col"><?php _e( 'Member', 'rcp-custom-renewal-date' ); ?></th>
+						<th scope="col"><?php _e( 'Product Status', 'rcp-custom-renewal-date' ); ?></th>
+						<th scope="col"><?php _e( 'Expiration', 'rcp-custom-renewal-date' ); ?></th>
+						<th scope="col"><?php _e( 'Remaining Licenses', 'rcp-custom-renewal-date' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -395,12 +395,12 @@ class Ithemes_Updater_Settings_Page {
 					<?php foreach ( $products as $name => $data ) : ?>
 						<?php
 							if ( -1 == $data['total'] )
-								$remaining = __( 'unlimited', 'rcp-hsed' );
+								$remaining = __( 'unlimited', 'rcp-custom-renewal-date' );
 							else
 								$remaining = $data['total'] - $data['used'];
 
 //							if ( 0 == $remaining )
-//								$remaining .= ' <a class="button-secondary upgrade">' . __( 'Upgrade', 'rcp-hsed' ) . '</a>';
+//								$remaining .= ' <a class="button-secondary upgrade">' . __( 'Upgrade', 'rcp-custom-renewal-date' ) . '</a>';
 
 
 							$expiration = $this->get_expiration_string( $data['expiration'] );
@@ -456,7 +456,7 @@ class Ithemes_Updater_Settings_Page {
 						<td colspan="6">
 							<input type="text" name="it-updater-username" placeholder="iThemes Username" value="<?php echo esc_attr( $post_data['username'] ); ?>" autocomplete="off" />
 							<input type="password" name="it-updater-password" placeholder="Password" value="<?php echo esc_attr( $post_data['password'] ); ?>" />
-							<input class="button-primary" type="submit" name="submit" value="<?php _e( 'Remove Licenses', 'rcp-hsed' ); ?>" />
+							<input class="button-primary" type="submit" name="submit" value="<?php _e( 'Remove Licenses', 'rcp-custom-renewal-date' ); ?>" />
 							<input type="hidden" name="action" value="unlicense_packages" />
 						</td>
 					</tr>
@@ -490,11 +490,11 @@ class Ithemes_Updater_Settings_Page {
 		<?php wp_nonce_field( 'license_packages', 'ithemes_updater_nonce' ); ?>
 
 		<div class="ithemes-updater-products" id="ithemes-updater-unlicensed">
-			<h3 class="subtitle"><?php _e( 'Unlicensed Products', 'rcp-hsed' ); ?></h3>
+			<h3 class="subtitle"><?php _e( 'Unlicensed Products', 'rcp-custom-renewal-date' ); ?></h3>
 
-			<p><?php _e( 'The following products have not been licensed. Licensing a product gives you access to automatic updates from within WordPress.', 'rcp-hsed' ); ?></p>
-			<p><?php _e( 'To license products, select the products you wish to license, enter your iThemes membership username and password, and press the License Products button.', 'rcp-hsed' ); ?></p>
-			<p><?php printf( __( 'Need help? <a href="%s">Click here for a quick video tutorial</a>.', 'rcp-hsed' ), 'http://ithemes.com/2013/04/11/introducing-the-new-and-improved-ithemes-licensing-system/' ); ?></p>
+			<p><?php _e( 'The following products have not been licensed. Licensing a product gives you access to automatic updates from within WordPress.', 'rcp-custom-renewal-date' ); ?></p>
+			<p><?php _e( 'To license products, select the products you wish to license, enter your iThemes membership username and password, and press the License Products button.', 'rcp-custom-renewal-date' ); ?></p>
+			<p><?php printf( __( 'Need help? <a href="%s">Click here for a quick video tutorial</a>.', 'rcp-custom-renewal-date' ), 'http://ithemes.com/2013/04/11/introducing-the-new-and-improved-ithemes-licensing-system/' ); ?></p>
 
 			<table class="ithemes-updater-listing widefat">
 				<thead>
@@ -506,7 +506,7 @@ class Ithemes_Updater_Settings_Page {
 							</label>
 						</th>
 						<th scope="col">
-							<label for="cb-select-all-2"><?php _e( 'Product', 'rcp-hsed' ); ?></label>
+							<label for="cb-select-all-2"><?php _e( 'Product', 'rcp-custom-renewal-date' ); ?></label>
 						</th>
 					</tr>
 				</thead>
@@ -546,7 +546,7 @@ class Ithemes_Updater_Settings_Page {
 						<td colspan="2">
 							<input type="text" name="it-updater-username" placeholder="iThemes Username" value="<?php echo esc_attr( $post_data['username'] ); ?>" autocomplete="off" />
 							<input type="password" name="it-updater-password" placeholder="Password" value="<?php echo esc_attr( $post_data['password'] ); ?>" />
-							<input class="button-primary" type="submit" name="submit" value="<?php _e( 'License Products', 'rcp-hsed' ); ?>" />
+							<input class="button-primary" type="submit" name="submit" value="<?php _e( 'License Products', 'rcp-custom-renewal-date' ); ?>" />
 							<input type="hidden" name="action" value="license_packages" />
 						</td>
 					</tr>
@@ -566,19 +566,19 @@ class Ithemes_Updater_Settings_Page {
 
 ?>
 	<div class="ithemes-updater-products" id="ithemes-updater-unrecognized">
-		<h3 class="subtitle"><?php _e( 'Unrecognized Products', 'rcp-hsed' ); ?></h3>
+		<h3 class="subtitle"><?php _e( 'Unrecognized Products', 'rcp-custom-renewal-date' ); ?></h3>
 
-		<p><?php _e( 'The following products were not recognized by the licensing system. This can be due to a bug in the product code, a temporary server issue, or because the product is no longer supported.', 'rcp-hsed' ); ?></p>
-		<p><?php printf( __( 'Please check this page again at a later time to see if the problem resolves itself. If the product remains, please contact <a href="%s">iThemes support</a> and provide them with the details given below.', 'rcp-hsed' ), 'http://ithemes.com/support/' ); ?></p>
+		<p><?php _e( 'The following products were not recognized by the licensing system. This can be due to a bug in the product code, a temporary server issue, or because the product is no longer supported.', 'rcp-custom-renewal-date' ); ?></p>
+		<p><?php printf( __( 'Please check this page again at a later time to see if the problem resolves itself. If the product remains, please contact <a href="%s">iThemes support</a> and provide them with the details given below.', 'rcp-custom-renewal-date' ), 'http://ithemes.com/support/' ); ?></p>
 
 		<table class="ithemes-updater-listing widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php _e( 'Product', 'rcp-hsed' ); ?></th>
-					<th scope="col"><?php _e( 'Type', 'rcp-hsed' ); ?></th>
-					<th scope="col"><?php _e( 'Package', 'rcp-hsed' ); ?></th>
-					<th scope="col"><?php _e( 'Version', 'rcp-hsed' ); ?></th>
-					<th scope="col"><?php _e( 'Server Response', 'rcp-hsed' ); ?></th>
+					<th scope="col"><?php _e( 'Product', 'rcp-custom-renewal-date' ); ?></th>
+					<th scope="col"><?php _e( 'Type', 'rcp-custom-renewal-date' ); ?></th>
+					<th scope="col"><?php _e( 'Package', 'rcp-custom-renewal-date' ); ?></th>
+					<th scope="col"><?php _e( 'Version', 'rcp-custom-renewal-date' ); ?></th>
+					<th scope="col"><?php _e( 'Server Response', 'rcp-custom-renewal-date' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -588,7 +588,7 @@ class Ithemes_Updater_Settings_Page {
 						if ( ( isset( $data['status'] ) && 'error' == $data['status'] ) && ( ! empty( $data['error']['message'] ) ) )
 							$response = "{$data['error']['message']} ({$data['error']['code']})";
 						else
-							$response = __( 'Unknown Error', 'rcp-hsed' );
+							$response = __( 'Unknown Error', 'rcp-custom-renewal-date' );
 
 						if ( ++$count % 2 ) {
 							$class = 'alt';
@@ -640,9 +640,9 @@ class Ithemes_Updater_Settings_Page {
 ?>
 	<div class="wrap" id="ithemes-updater-site-url-confirmation">
 		<span class="ithemes-updater-header"></span>
-		<h2><?php _e( 'Licensing', 'rcp-hsed' ); ?></h2>
+		<h2><?php _e( 'Licensing', 'rcp-custom-renewal-date' ); ?></h2>
 
-		<p><?php _e( "Please confirm this site's licensed URL.", 'rcp-hsed' ); ?></p>
+		<p><?php _e( "Please confirm this site's licensed URL.", 'rcp-custom-renewal-date' ); ?></p>
 
 		<form id="posts-filter" enctype="multipart/form-data" method="post" action="<?php echo $this->self_url; ?>">
 			<?php wp_nonce_field( 'save_licensed_site_url', 'ithemes_updater_nonce' ); ?>
@@ -653,14 +653,14 @@ class Ithemes_Updater_Settings_Page {
 						<tbody>
 							<tr valign="top">
 								<th scope="row">
-									<label for="site_url"><?php _e( 'Licensed URL', 'rcp-hsed' ); ?></label>
+									<label for="site_url"><?php _e( 'Licensed URL', 'rcp-custom-renewal-date' ); ?></label>
 
 									<?php if ( is_multisite() ) : ?>
-										<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress network.', 'rcp-hsed' ); ?></p>
-										<p class="description ithemes-updater-description-warning"><?php _e( 'If not set correctly, some features may not function as expected.', 'rcp-hsed' ); ?></p>
+										<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress network.', 'rcp-custom-renewal-date' ); ?></p>
+										<p class="description ithemes-updater-description-warning"><?php _e( 'If not set correctly, some features may not function as expected.', 'rcp-custom-renewal-date' ); ?></p>
 									<?php else : ?>
-										<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress site.', 'rcp-hsed' ); ?></p>
-										<p class="description ithemes-updater-description-warning"><?php _e( 'If not set correctly, some features may not function as expected.', 'rcp-hsed' ); ?></p>
+										<p class="description"><?php _e( 'The Licensed URL should be the primary URL of this WordPress site.', 'rcp-custom-renewal-date' ); ?></p>
+										<p class="description ithemes-updater-description-warning"><?php _e( 'If not set correctly, some features may not function as expected.', 'rcp-custom-renewal-date' ); ?></p>
 									<?php endif; ?>
 								</th>
 								<td>
@@ -674,7 +674,7 @@ class Ithemes_Updater_Settings_Page {
 				</div>
 
 				<p class="submit">
-					<input id="save_licensed_site_url" class="button button-primary" type="submit" value="<?php _e( 'Save', 'rcp-hsed' ); ?>" />
+					<input id="save_licensed_site_url" class="button button-primary" type="submit" value="<?php _e( 'Save', 'rcp-custom-renewal-date' ); ?>" />
 					<input type="hidden" name="action" value="save_licensed_site_url" />
 					<input type="hidden" name="redirect" value="<?php echo esc_attr( $redirect ); ?>" />
 				</p>
@@ -689,9 +689,9 @@ class Ithemes_Updater_Settings_Page {
 		check_admin_referer( 'save_licensed_site_url', 'ithemes_updater_nonce' );
 
 		if ( empty( $data['site_url'] ) ) {
-			$this->errors[] = __( 'The licensed URL cannot be blank.', 'rcp-hsed' );
+			$this->errors[] = __( 'The licensed URL cannot be blank.', 'rcp-custom-renewal-date' );
 		} else if ( false === filter_var( $data['site_url'], FILTER_VALIDATE_URL ) ) {
-			$this->errors[] = __( 'The licensed URL must be a valid URL.', 'rcp-hsed' );
+			$this->errors[] = __( 'The licensed URL must be a valid URL.', 'rcp-custom-renewal-date' );
 		}
 
 		if ( ! empty( $this->errors ) ) {
@@ -714,7 +714,7 @@ class Ithemes_Updater_Settings_Page {
 
 
 		$GLOBALS['ithemes-updater-settings']->set_licensed_site_url( $site_url );
-		$this->messages[] = __( 'Successfully set the Licensed URL.', 'rcp-hsed' );
+		$this->messages[] = __( 'Successfully set the Licensed URL.', 'rcp-custom-renewal-date' );
 
 		if ( empty( $data['redirect'] ) ) {
 			$redirect = admin_url( 'options-general.php?page=ithemes-licensing&updated_url=true' );
@@ -745,9 +745,9 @@ class Ithemes_Updater_Settings_Page {
 ?>
 	<div class="wrap" id="ithemes-updater-relicense">
 		<span class="ithemes-updater-header"></span>
-		<h2><?php _e( 'Licensing', 'rcp-hsed' ); ?></h2>
+		<h2><?php _e( 'Licensing', 'rcp-custom-renewal-date' ); ?></h2>
 
-		<p><?php printf( __( 'The licenses on this site are for <code>%s</code>.', 'rcp-hsed' ), $site_url_from_server ); ?></p>
+		<p><?php printf( __( 'The licenses on this site are for <code>%s</code>.', 'rcp-custom-renewal-date' ), $site_url_from_server ); ?></p>
 
 		<form id="posts-filter" enctype="multipart/form-data" method="post" action="<?php echo $this->self_url; ?>">
 			<?php wp_nonce_field( 'relicense', 'ithemes_updater_nonce' ); ?>
@@ -759,42 +759,42 @@ class Ithemes_Updater_Settings_Page {
 							<tr valign="top">
 								<th scope="row">
 									<label for="relicense_option">
-										<?php _e( 'License Option', 'rcp-hsed' ); ?>
+										<?php _e( 'License Option', 'rcp-custom-renewal-date' ); ?>
 									</label>
 								</th>
 								<td>
 									<p>
 										<label>
 											<input type="radio" name="relicense_option" value="relicense" <?php if ( 'relicense' === $data['relicense_option'] ) echo 'checked="checked"'; ?> />
-											<?php _e( 'Create new licenses for this site.', 'rcp-hsed' ); ?>
+											<?php _e( 'Create new licenses for this site.', 'rcp-custom-renewal-date' ); ?>
 										</label>
 									</p>
-									<p class="description ithemes-updater-description-warning"><?php _e( 'Use this option if this site was cloned from another site and needs to have its own licenses.', 'rcp-hsed' ); ?></p>
+									<p class="description ithemes-updater-description-warning"><?php _e( 'Use this option if this site was cloned from another site and needs to have its own licenses.', 'rcp-custom-renewal-date' ); ?></p>
 									<br />
 
 									<p>
 										<label>
 											<input type="radio" name="relicense_option" value="update" <?php if ( 'update' === $data['relicense_option'] ) echo 'checked="checked"'; ?> />
-											<?php printf( __( 'Change the existing licenses to be for <code>%s</code>.', 'rcp-hsed' ), $data['site_url'] ); ?>
+											<?php printf( __( 'Change the existing licenses to be for <code>%s</code>.', 'rcp-custom-renewal-date' ), $data['site_url'] ); ?>
 										</label>
 									</p>
 									<p class="description ithemes-updater-description-notice">
 										<span class="dashicons dashicons-warning"></span>
-										<?php printf( __( 'Note: If the <code>%s</code> site still exists and is different from this site, you will have to create new licenses on that site.', 'rcp-hsed' ), $data['site_url'], $site_url_from_server ); ?>
+										<?php printf( __( 'Note: If the <code>%s</code> site still exists and is different from this site, you will have to create new licenses on that site.', 'rcp-custom-renewal-date' ), $data['site_url'], $site_url_from_server ); ?>
 									</p>
-									<p class="description ithemes-updater-description-warning"><?php printf( __( 'Use this option if this site\'s primary URL has changed from <code>%1$s</code> to <code>%2$s</code>.', 'rcp-hsed' ), $site_url_from_server, $data['site_url'] ); ?></p>
+									<p class="description ithemes-updater-description-warning"><?php printf( __( 'Use this option if this site\'s primary URL has changed from <code>%1$s</code> to <code>%2$s</code>.', 'rcp-custom-renewal-date' ), $site_url_from_server, $data['site_url'] ); ?></p>
 								</td>
 							</tr>
 							<tr valign="top">
 								<th scope="row" colspan="2">
-									<label for="it-updater-username"><?php _e( 'iThemes Username', 'rcp-hsed' ); ?></label>
+									<label for="it-updater-username"><?php _e( 'iThemes Username', 'rcp-custom-renewal-date' ); ?></label>
 									<br />
 									<input id="it-updater-username" type="text" name="it-updater-username" value="<?php echo esc_attr( $data['username'] ); ?>" />
 								</th>
 							</tr>
 							<tr valign="top">
 								<th scope="row" colspan="2">
-									<label for="it-updater-password"><?php _e( 'iThemes Password', 'rcp-hsed' ); ?></label>
+									<label for="it-updater-password"><?php _e( 'iThemes Password', 'rcp-custom-renewal-date' ); ?></label>
 									<br />
 									<input id="it-updater-password" type="password" name="it-updater-password" value="<?php echo esc_attr( $data['password'] ); ?>" />
 								</th>
@@ -804,7 +804,7 @@ class Ithemes_Updater_Settings_Page {
 				</div>
 
 				<p class="submit">
-					<input id="relicense" class="button button-primary" type="submit" value="<?php _e( 'Save', 'rcp-hsed' ); ?>" />
+					<input id="relicense" class="button button-primary" type="submit" value="<?php _e( 'Save', 'rcp-custom-renewal-date' ); ?>" />
 					<input type="hidden" name="action" value="relicense" />
 					<input type="hidden" name="site_url" value="<?php echo esc_attr( $data['site_url'] ); ?>" />
 					<input type="hidden" name="redirect" value="<?php echo esc_attr( $data['redirect'] ); ?>" />
@@ -820,17 +820,17 @@ class Ithemes_Updater_Settings_Page {
 		check_admin_referer( 'relicense', 'ithemes_updater_nonce' );
 
 		if ( empty( $data['username'] ) && empty( $data['password'] ) ) {
-			$this->errors[] = __( 'You must supply an iThemes membership username and password in order to change the licensed URL.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership username and password in order to change the licensed URL.', 'rcp-custom-renewal-date' );
 		} else if ( empty( $data['username'] ) ) {
-			$this->errors[] = __( 'You must supply an iThemes membership username in order to change the licensed URL.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership username in order to change the licensed URL.', 'rcp-custom-renewal-date' );
 		} else if ( empty( $data['password'] ) ) {
-			$this->errors[] = __( 'You must supply an iThemes membership password in order to change the licensed URL.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must supply an iThemes membership password in order to change the licensed URL.', 'rcp-custom-renewal-date' );
 		} else if ( empty( $data['site_url'] ) ) {
-			$this->errors[] = __( 'The licensed URL cannot be blank.', 'rcp-hsed' );
+			$this->errors[] = __( 'The licensed URL cannot be blank.', 'rcp-custom-renewal-date' );
 		} else if ( false === filter_var( $data['site_url'], FILTER_VALIDATE_URL ) ) {
-			$this->errors[] = __( 'The licensed URL must be a valid URL.', 'rcp-hsed' );
+			$this->errors[] = __( 'The licensed URL must be a valid URL.', 'rcp-custom-renewal-date' );
 		} else if ( empty( $data['relicense_option'] ) || ! in_array( $data['relicense_option'], array( 'relicense', 'update' ) ) ) {
-			$this->errors[] = __( 'You must pick one of the License Option options.', 'rcp-hsed' );
+			$this->errors[] = __( 'You must pick one of the License Option options.', 'rcp-custom-renewal-date' );
 		}
 
 		if ( ! empty( $this->errors ) ) {
@@ -849,7 +849,7 @@ class Ithemes_Updater_Settings_Page {
 			}
 
 			$GLOBALS['ithemes-updater-settings']->set_licensed_site_url( $data['site_url'] );
-			$this->messages[] = __( 'Successfully updated the Licensed URL.', 'rcp-hsed' );
+			$this->messages[] = __( 'Successfully updated the Licensed URL.', 'rcp-custom-renewal-date' );
 		} else {
 			require_once( $GLOBALS['ithemes_updater_path'] . '/keys.php' );
 			$keys = Ithemes_Updater_Keys::get();
@@ -864,7 +864,7 @@ class Ithemes_Updater_Settings_Page {
 			}
 
 			$GLOBALS['ithemes-updater-settings']->set_licensed_site_url( $data['site_url'] );
-			$this->messages[] = __( 'Successfully updated the Licensed URL.', 'rcp-hsed' );
+			$this->messages[] = __( 'Successfully updated the Licensed URL.', 'rcp-custom-renewal-date' );
 
 			$response = Ithemes_Updater_API::activate_package( $data['username'], $data['password'], $packages );
 
@@ -924,16 +924,16 @@ class Ithemes_Updater_Settings_Page {
 			$expiration = date( 'Y-m-d', $expiration_timestamp );
 		else {
 			if ( $time_left > 86400 )
-				$expiration = sprintf( _n( '%d day', '%d days', intval( $time_left / 86400 ), 'rcp-hsed' ), intval( $time_left / 86400 ) );
+				$expiration = sprintf( _n( '%d day', '%d days', intval( $time_left / 86400 ), 'rcp-custom-renewal-date' ), intval( $time_left / 86400 ) );
 			else if ( $time_left > 3600 )
-				$expiration = sprintf( _n( '%d hour', '%d hours', intval( $time_left / 3600 ), 'rcp-hsed' ), intval( $time_left / 3600 ) );
+				$expiration = sprintf( _n( '%d hour', '%d hours', intval( $time_left / 3600 ), 'rcp-custom-renewal-date' ), intval( $time_left / 3600 ) );
 			else if ( $time_left > 60 )
-				$expiration = sprintf( _n( '%d minute', '%d minutes', intval( $time_left / 60 ), 'rcp-hsed' ), intval( $time_left / 60 ) );
+				$expiration = sprintf( _n( '%d minute', '%d minutes', intval( $time_left / 60 ), 'rcp-custom-renewal-date' ), intval( $time_left / 60 ) );
 			else
-				$expiration = sprintf( _n( '%d second', '%d seconds', $time_left, 'rcp-hsed' ), intval( $time_left / 60 ) );
+				$expiration = sprintf( _n( '%d second', '%d seconds', $time_left, 'rcp-custom-renewal-date' ), intval( $time_left / 60 ) );
 
 			if ( $expired )
-				$expiration = sprintf( __( '%s ago', 'rcp-hsed' ), $expiration );
+				$expiration = sprintf( __( '%s ago', 'rcp-custom-renewal-date' ), $expiration );
 		}
 
 		return $expiration;

@@ -1,2 +1,2 @@
-# rcp-hardset-expiration-dates
-Allows for a specific expiration date to be assigned to subscription levels. All members will expire on that date
+# rcp-custom-renewal-date
+Allows for a specific renewal date to be assigned to membership levels. All members on that membership level will renew or expire on that date

@@ -39,7 +39,7 @@ class Ithemes_Updater_Information {
 
 		if ( is_wp_error( $changelog ) ) {
 			/* translators: 1. Error message, 2. Error code */
-			$changelog = sprintf( __( '<p>Unable to get changelog data at this time.</p><p>%1$s (%2$s)</p>', 'rcp-hsed' ), $changelog->get_error_message(), $changelog->get_error_code() );
+			$changelog = sprintf( __( '<p>Unable to get changelog data at this time.</p><p>%1$s (%2$s)</p>', 'rcp-custom-renewal-date' ), $changelog->get_error_message(), $changelog->get_error_code() );
 		}
 
 
